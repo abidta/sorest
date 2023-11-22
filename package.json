@@ -1,0 +1,33 @@
+{
+  "name": "sorest",
+  "version": "0.0.1",
+  "description": "social media backend",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev":"nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abidta/sorest.git"
+  },
+  "keywords": [
+    "social media",
+    "",
+    "REST",
+    "sorest"
+  ],
+  "author": "Sainul Abid",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/abidta/sorest/issues"
+  },
+  "homepage": "https://github.com/abidta/sorest#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
