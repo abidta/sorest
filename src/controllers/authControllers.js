@@ -1,3 +1,3 @@
-export const login=(req,res)=>{
-res.send('login success')
+export const login = (req, res) => {
+  res.send('login success')
 }

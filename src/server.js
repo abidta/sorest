@@ -9,9 +9,9 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 //logger morgan
-app.use(logger("dev"))
+app.use(logger('dev'))
 
 //routes
-app.use('/',v1routes)
+app.use('/', v1routes)
 
 export { app }
