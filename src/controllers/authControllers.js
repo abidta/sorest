@@ -7,6 +7,14 @@ export const signup = async (req, res, next) => {
   try {
     console.log(req.body)
     const { name, email, password } = req.body
+    //check user exist
+    let userExist = await User.exists({ email: email })
+    console.log(userExist, 'lok')
+    if (userExist) {
+      //if a email alredy registered, throw a new error
+      throw new Error('user already exist')
+    }
+    // new user, create new doc
     let user = await User.create({
       name,
       email,

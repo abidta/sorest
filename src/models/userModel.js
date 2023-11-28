@@ -17,7 +17,11 @@ const userSchema = new Schema({
   },
   date: String,
 })
-userSchema.pre('save', async function (next) {
+// userSchema.pre('validate',function (next,options) {
+  
+// })
+userSchema.pre('save', async function (next,options) {
+  console.log( {...options},'optt');
   try {
     let salt = await bcrypt.genSalt(10)
     this.password = await bcrypt.hash(this.password, salt)
