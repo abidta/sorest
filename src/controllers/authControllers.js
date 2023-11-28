@@ -1,7 +1,29 @@
 import User from '../models/userModel.js'
 
-export const login = (req, res) => {
-  res.send('login success')
+export const login = async (req, res, next) => {
+  const { email, password } = req.body
+  try {
+    //check user exists
+    let user = await User.exists({ email: email })
+    if (!user) {
+      //no user with this email, throw error
+      throw new Error('user not found, check email')
+    }
+    //email validation success, get user details for password checking
+    let [userData] = await User.find(user._id)
+    //check password is correct
+    let isCorrect = await userData.matchPassword(password)
+    if (!isCorrect) {
+      //password is not correct throw new error
+      throw new Error('password dosent match, check password')
+    }
+    //all checking passed , do after login
+    res.json('login successful')
+  } catch (e) {
+    console.log(e.cause);
+    res.status(401).send(e.message)
+    next(e)
+  }
 }
 export const signup = async (req, res, next) => {
   try {
@@ -11,7 +33,7 @@ export const signup = async (req, res, next) => {
     let userExist = await User.exists({ email: email })
     console.log(userExist, 'lok')
     if (userExist) {
-      //if a email alredy registered, throw a new error
+      //if a email alredy registered, throw new error
       throw new Error('user already exist')
     }
     // new user, create new doc
@@ -23,6 +45,7 @@ export const signup = async (req, res, next) => {
     })
     res.status(201).json(`succcessfully created user ${user.name}`)
   } catch (e) {
+    console.log('fgui')
     res.status(400).send(e.message)
     next(e)
   }

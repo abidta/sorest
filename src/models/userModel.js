@@ -18,10 +18,10 @@ const userSchema = new Schema({
   date: String,
 })
 // userSchema.pre('validate',function (next,options) {
-  
+
 // })
-userSchema.pre('save', async function (next,options) {
-  console.log( {...options},'optt');
+userSchema.pre('save', async function (next, options) {
+  console.log({ ...options }, 'optt')
   try {
     let salt = await bcrypt.genSalt(10)
     this.password = await bcrypt.hash(this.password, salt)
@@ -30,6 +30,9 @@ userSchema.pre('save', async function (next,options) {
   } catch (e) {
     next(e)
   }
+})
+userSchema.method('matchPassword', async function (clientPassword) {
+  return await bcrypt.compare(clientPassword, this.password)
 })
 const User = new mongoose.model('User', userSchema)
 export default User
