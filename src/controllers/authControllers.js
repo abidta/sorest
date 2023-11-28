@@ -15,6 +15,7 @@ export const signup = async (req, res, next) => {
     })
     res.status(201).json(`succcessfully created user ${user.name}`)
   } catch (e) {
+    res.status(400).send(e.message)
     next(e)
   }
 }
