@@ -9,7 +9,7 @@ export async function connectDb() {
       )
     })
   } catch (err) {
-    console.log(err,'lklk')
+    console.log('error => ',err)
     process.exit(1)
   }
 }

@@ -9,7 +9,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 //logger morgan
-app.use(logger('dev'))
+app.use(logger('tiny'))
 
 //routes
 app.use('/', v1routes)

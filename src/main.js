@@ -2,7 +2,7 @@ import http from 'http'
 import { app } from './server.js'
 import { connectDb } from './config/db.js'
 const server = http.createServer(app)
-//const PORT = 3000
+const PORT = process.env.PORT||3000
 async function main() {
   try {
     await startServerAndDb()
@@ -12,7 +12,7 @@ async function main() {
   }
 }
 async function startServerAndDb() {
-  connectDb()
-  server.listen(process.env.PORT||6000, () => console.log(`server listening in `))
+ await connectDb()
+  server.listen(PORT, () => console.log(`server listening in ${PORT} `))
 }
 main()
