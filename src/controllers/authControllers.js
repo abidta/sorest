@@ -1,4 +1,5 @@
 import User from '../models/userModel.js'
+import { generateToken } from '../utils/generateToken.js'
 
 export const login = async (req, res, next) => {
   const { email, password } = req.body
@@ -18,7 +19,10 @@ export const login = async (req, res, next) => {
       throw new Error('password dosent match, check password')
     }
     //all checking passed , do after login
-    res.json('login successful')
+    let token = generateToken(user._id)
+    console.log(token,'uo');
+    let TTL_COOKIE= 3600 * 1000
+    res.cookie('token',token,{maxAge:TTL_COOKIE}).send('login successful')
   } catch (e) {
     console.log(e.cause);
     res.status(401).send(e.message)
