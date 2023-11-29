@@ -20,13 +20,12 @@ export const login = async (req, res, next) => {
     }
     //all checking passed , do after login
     let token = generateToken(user._id)
-    console.log(token,'uo');
-    let TTL_COOKIE= 3600 * 1000
-    res.cookie('token',token,{maxAge:TTL_COOKIE}).send('login successful')
+    console.log(token, 'uo')
+    let TTL_COOKIE = 3600 * 1000
+    res.cookie('token', token, { maxAge: TTL_COOKIE }).send('login successful')
   } catch (e) {
-    console.log(e.cause);
+    console.log(e.cause)
     res.status(401).send(e.message)
-    next(e)
   }
 }
 export const signup = async (req, res, next) => {
@@ -51,6 +50,5 @@ export const signup = async (req, res, next) => {
   } catch (e) {
     console.log('fgui')
     res.status(400).send(e.message)
-    next(e)
   }
 }
