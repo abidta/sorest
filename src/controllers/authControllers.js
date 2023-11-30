@@ -22,7 +22,9 @@ export const login = async (req, res, next) => {
     let token = generateToken(user._id)
     console.log(token, 'uo')
     let TTL_COOKIE = 3600 * 1000
-    res.cookie('token', token, { maxAge: TTL_COOKIE }).send('login successful')
+    res
+      .cookie('access_token', token, { httpOnly: true, maxAge: TTL_COOKIE })
+      .send('login successful')
   } catch (e) {
     console.log(e.cause)
     res.status(401).send(e.message)
@@ -52,3 +54,4 @@ export const signup = async (req, res, next) => {
     res.status(400).send(e.message)
   }
 }
+export const logout = (req, res) => {}
