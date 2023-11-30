@@ -2,32 +2,35 @@ import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 
 const { Schema } = mongoose
-const userSchema = new Schema({
-  name: {
-    type: String,
-    required: [true, 'name is required'],
-    minLength: [3, 'minimum 3 character for names {VALUE}'],
-    maxLength: [30, 'maximum 30 character for names'],
+const userSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'name is required'],
+      minLength: [3, 'minimum 3 character for names {VALUE}'],
+      maxLength: [30, 'maximum 30 character for names'],
+    },
+    email: {
+      type: String,
+      unique: true,
+      required: [true, 'mail is required '],
+      match: [
+        /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+        'Enter a valid email',
+      ],
+    },
+    password: {
+      type: String,
+      required: [true, 'password is required'],
+      match: [
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        'password must include a lowercase, uppercase, number and special character',
+      ],
+    },
+    posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
   },
-  email: {
-    type: String,
-    unique:true,
-    required: [true, 'mail is required '],
-    match: [
-      /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-      'Enter a valid email',
-    ],
-  },
-  password: {
-    type: String,
-    required: [true, 'password is required'],
-    match: [
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-      'password must include a lowercase, uppercase, number and special character',
-    ],
-  },
-  date: String,
-})
+  { timestamps: true }
+)
 // userSchema.pre('validate',function (next,options) {
 
 // })

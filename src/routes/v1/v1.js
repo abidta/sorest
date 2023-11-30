@@ -6,5 +6,5 @@ import { verifyToken } from '../../middlewares/verifyToken.js'
 const router = express
   .Router()
   .use('/auth', authRoutes)
-  .use('/user',verifyToken, userRoutes)
+  .use('/',verifyToken, userRoutes)
 export default router
