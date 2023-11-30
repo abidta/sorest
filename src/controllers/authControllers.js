@@ -50,8 +50,12 @@ export const signup = async (req, res, next) => {
     })
     res.status(201).json(`succcessfully created user ${user.name}`)
   } catch (e) {
-    console.log('fgui')
     res.status(400).send(e.message)
   }
 }
-export const logout = (req, res) => {}
+export const logout = (req, res) => {
+  return res
+    .clearCookie('access_token')
+    .status(202)
+    .json({ message: 'Logout sucessfully' })
+}
