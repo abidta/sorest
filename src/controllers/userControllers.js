@@ -7,13 +7,12 @@ export const user = (req, res) => {
 export const createPost = async (req, res) => {
   console.log(req.body)
   try {
-   let newPOst= await Post.create({
+    let newPost = await Post.create({
       user: new mongoose.Types.ObjectId(req.userId),
       content: req.body.content,
     })
-    console.log(newPOst)
-    res.status(201).json(newPOst)
-
+    console.log(newPost)
+    res.status(201).json(newPost)
   } catch (e) {
     res.status(400).send(e.message)
   }
