@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 
 export const verifyToken = (req, res, next) => {
   try {
-    console.log(req.headers);
+    console.log(req.headers)
     console.log(req.headers.cookie.split('=')[1])
     let verified = jwt.verify(
       req.headers.cookie.split('=')[1],
