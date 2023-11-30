@@ -20,7 +20,6 @@ export const login = async (req, res, next) => {
     }
     //all checking passed , do after login
     let token = generateToken(user._id)
-    console.log(token, 'uo')
     let TTL_COOKIE = 3600 * 1000
     return res
       .cookie('access_token', token, { httpOnly: true, maxAge: TTL_COOKIE })
