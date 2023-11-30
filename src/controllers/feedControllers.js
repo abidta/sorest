@@ -5,9 +5,9 @@ export const getPosts = async (req, res) => {
       path: 'user',
       select: 'name -_id',
     })
-    res.json(posts)
+    return res.json(posts)
   } catch (e) {
     console.log('get post')
-    res.status(401).send(e.message)
+    return res.status(401).send(e.message)
   }
 }

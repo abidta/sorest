@@ -22,12 +22,11 @@ export const login = async (req, res, next) => {
     let token = generateToken(user._id)
     console.log(token, 'uo')
     let TTL_COOKIE = 3600 * 1000
-    res
+    return res
       .cookie('access_token', token, { httpOnly: true, maxAge: TTL_COOKIE })
       .send('login successful')
   } catch (e) {
-    console.log(e.cause)
-    res.status(401).send(e.message)
+    return res.status(401).send(e.message)
   }
 }
 export const signup = async (req, res, next) => {
@@ -48,7 +47,7 @@ export const signup = async (req, res, next) => {
       password,
       date: Date.now(),
     })
-    res.status(201).json(`succcessfully created user ${user.name}`)
+    return res.status(201).json(`succcessfully created user ${user.name}`)
   } catch (e) {
     res.status(400).send(e.message)
   }
