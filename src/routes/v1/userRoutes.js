@@ -1,9 +1,10 @@
 import expres from 'express'
-import { user,createPost } from '../../controllers/userControllers.js'
+import { createPost } from '../../controllers/userControllers.js'
+import { getPosts } from '../../controllers/feedControllers.js'
 
 const router = expres.Router()
 
-router.route('/').get(user)
+router.route('/').get(getPosts)
 router.route('/post').post(createPost)
 
 export default router
