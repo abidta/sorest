@@ -31,9 +31,11 @@ export const login = async (req, res, next) => {
 export const signup = async (req, res, next) => {
   try {
     console.log(req.body)
-    const { name, email, password } = req.body
+    const { username, fullName, email, password } = req.body
     //check user exist
-    let userExist = await User.exists({ email: email })
+    let userExist = await User.exists({
+      $or: [{ username:username }, { email: email }],
+    })
     console.log(userExist, 'lok')
     if (userExist) {
       //if a email alredy registered, throw new error
@@ -41,12 +43,12 @@ export const signup = async (req, res, next) => {
     }
     // new user, create new doc
     let user = await User.create({
-      name,
+      username,
       email,
       password,
-      date: Date.now(),
+      fullName,
     })
-    return res.status(201).json(`succcessfully created user ${user.name}`)
+    return res.status(201).json(`succcessfully created user ${user.fullName}`)
   } catch (e) {
     res.status(400).send(e.message)
   }

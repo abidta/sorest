@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 const { Schema } = mongoose
 const userSchema = new Schema(
   {
-    userName:{
+    username:{
       type:String,
       required: [true, 'user name is required'],
       minLength: [3, 'minimum 3 character for user names you entered :{VALUE}'],
