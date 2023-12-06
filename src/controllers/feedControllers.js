@@ -3,7 +3,7 @@ export const getPosts = async (req, res) => {
   try {
     let posts = await Post.find().populate({
       path: 'user',
-      select: 'name -_id',
+      select: 'username',
     })
     return res.json(posts)
   } catch (e) {

@@ -4,7 +4,7 @@ export const verifyToken = (req, res, next) => {
   try {
     if (req.cookies?.access_token) {
       let verified = jwt.verify(
-        req.cookies?.access_token,
+        req.cookies.access_token,
         process.env.JWT_SECRET
       )
       if (verified) {
