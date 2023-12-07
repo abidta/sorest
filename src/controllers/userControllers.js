@@ -40,3 +40,28 @@ export const getUserProfile = async (req, res) => {
     res.status(500).send(e.message)
   }
 }
+export const updateUserDeatails = async (req, res) => {
+  const { name } = req.body
+  let isUpdated = await User.updateOne({ _id: req.userId }, { fullName: name })
+  console.log(isUpdated)
+  res.json(isUpdated.acknowledged)
+}
+export const updatePassword = async (req, res) => {
+  const { oldPassword, newPassword } = req.body
+  console.log(req.body)
+  console.log(oldPassword, 'old')
+  try {
+    const [user] = await User.find({ _id: req.userId })
+    console.log(user)
+    let isValid = await user.matchPassword(oldPassword)
+    console.log(isValid)
+    if (!isValid) {
+      throw new Error('password doesnt match ')
+    }
+    user.password = newPassword
+    await user.save()
+    res.status(204).json('updste successfully')
+  } catch (e) {
+    res.status(400).json(e.message)
+  }
+}

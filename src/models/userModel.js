@@ -4,8 +4,8 @@ import bcrypt from 'bcrypt'
 const { Schema } = mongoose
 const userSchema = new Schema(
   {
-    username:{
-      type:String,
+    username: {
+      type: String,
       required: [true, 'user name is required'],
       minLength: [3, 'minimum 3 character for user names you entered :{VALUE}'],
       maxLength: [30, 'maximum 30 character for user names'],
@@ -37,16 +37,12 @@ const userSchema = new Schema(
   },
   { timestamps: true }
 )
-// userSchema.pre('validate',function (next,options) {
 
-// })
 userSchema.pre('save', async function (next, options) {
-  console.log({ ...options }, 'optt')
   try {
     let salt = await bcrypt.genSalt(10)
     this.password = await bcrypt.hash(this.password, salt)
-    console.log('hook')
-    return next()
+    next()
   } catch (e) {
     next(e)
   }
