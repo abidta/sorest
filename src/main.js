@@ -1,5 +1,5 @@
 import http from 'http'
-import { app } from './server.js'
+import { app } from './app.js'
 import { connectDb } from './config/db.js'
 const server = http.createServer(app)
 const PORT = process.env.PORT||3000
