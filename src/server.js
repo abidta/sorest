@@ -1,8 +1,10 @@
-import express from 'express'
+import express, { json } from 'express'
 import logger from 'morgan'
 import v1routes from './routes/v1/v1.js'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import swaggerUi from 'swagger-ui-express'
+import swaggerDocument from '../swagger-output.json' assert{type:'json'}
 
 const app = express()
 
@@ -16,6 +18,7 @@ app.use(cookieParser())
 app.use(logger('dev'))
 
 //routes
+app.use('/api-docs',swaggerUi.serve,swaggerUi.setup(swaggerDocument))
 app.use('/', v1routes)
 
 export { app }

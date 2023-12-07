@@ -60,7 +60,7 @@ export const updatePassword = async (req, res) => {
     }
     user.password = newPassword
     await user.save()
-    res.status(204).json('updste successfully')
+    res.status(200).json('update successfully')
   } catch (e) {
     res.status(400).json(e.message)
   }
