@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "My API",
+    "title": "soREST API",
     "description": "Description",
     "version": "1.0.0"
   },
@@ -11,7 +11,7 @@
     "http"
   ],
   "paths": {
-    "/login": {
+    "/auth/login": {
       "post": {
         "description": "",
         "parameters": [
@@ -38,7 +38,7 @@
         }
       }
     },
-    "/signup": {
+    "/auth/signup": {
       "post": {
         "description": "",
         "parameters": [
@@ -74,7 +74,7 @@
         }
       }
     },
-    "/logout": {
+    "/auth/logout": {
       "post": {
         "description": "",
         "responses": {
@@ -96,6 +96,9 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
@@ -123,6 +126,12 @@
           },
           "400": {
             "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
@@ -147,6 +156,12 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
@@ -177,6 +192,12 @@
           },
           "400": {
             "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
@@ -195,6 +216,12 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           },
           "404": {
             "description": "Not Found"
