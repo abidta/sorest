@@ -8,7 +8,7 @@ import swaggerDocument from '../swagger-output.json' assert{type:'json'}
 
 const app = express()
 
-app.use(cors({ origin: true }))
+app.use(cors({ origin: '*' }))
 //regular middlewares
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
