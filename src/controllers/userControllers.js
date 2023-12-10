@@ -22,6 +22,25 @@ export const createPost = async (req, res) => {
     res.status(400).send(e.message)
   }
 }
+export const getPost = async (req, res) => {
+  const { id: postId } = req.params
+  try {
+    if (!isValidObjectId(postId)) {
+      throw new Error('invalid ObjectId')
+    }
+    let post = await Post.findById(postId).populate(
+      'user',
+      'username fullName email'
+    )
+    if (!post) {
+      throw new Error('post not found')
+    }
+    res.status(200).json(post)
+  } catch (e) {
+    console.log(e.abid)
+    res.status(404).send(e.message)
+  }
+}
 export const getUserProfile = async (req, res) => {
   try {
     if (req.params?.username) {
@@ -82,7 +101,6 @@ export const likePost = async (req, res) => {
     if (!post) {
       throw new Error('post not found')
     }
-    let userId = req.userId
     switch (action) {
       case 'like':
         if (post.likes.indexOf(req.userId) == -1) {
@@ -97,8 +115,7 @@ export const likePost = async (req, res) => {
         }
         break
       default:
-        res.status(400).send('query is not valid')
-        break
+        return res.status(400).send('query is not valid')
     }
     res.status(200).send('done')
   } catch (e) {
