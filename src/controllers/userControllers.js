@@ -1,6 +1,7 @@
 import mongoose, { isValidObjectId } from 'mongoose'
 import Post from '../models/postModel.js'
 import User from '../models/userModel.js'
+import createError from 'http-errors'
 
 export const user = (req, res) => {
   console.log(req.userId)
@@ -22,23 +23,23 @@ export const createPost = async (req, res) => {
     res.status(400).send(e.message)
   }
 }
-export const getPost = async (req, res) => {
+export const getPost = async (req, res, next) => {
   const { id: postId } = req.params
   try {
     if (!isValidObjectId(postId)) {
-      throw new Error('invalid ObjectId')
+      throw new createError(400, 'id not valid')
     }
     let post = await Post.findById(postId).populate(
       'user',
       'username fullName email'
     )
     if (!post) {
-      throw new Error('post not found')
+      throw createError(404, 'post not found')
     }
     res.status(200).json(post)
   } catch (e) {
-    console.log(e.abid)
-    res.status(404).send(e.message)
+    next(e)
+    //res.status(404).send(e.message)
   }
 }
 export const getUserProfile = async (req, res) => {
@@ -123,4 +124,20 @@ export const likePost = async (req, res) => {
   }
 
   console.log('hmm')
+}
+export const createComment = async (req, res, next) => {
+  const { comment } = req.body
+  const {id: postId } = req.params
+  try {
+    if (!isValidObjectId(postId)) {
+      throw createError(400,"objectId not valid ")
+    }
+    let post = await Post.findById(postId)
+    if (!post) throw createError(404,'not found')
+    post.comments.push({user:req.userId,text:comment})
+    await post.save()
+    res.status(200).json(post)
+  } catch (e) {
+    next(e)
+  }
 }
