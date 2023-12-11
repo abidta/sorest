@@ -1,3 +1,4 @@
+import createError from 'http-errors'
 import User from '../models/userModel.js'
 import { generateToken } from '../utils/generateToken.js'
 
@@ -8,7 +9,7 @@ export const login = async (req, res, next) => {
     let user = await User.exists({ email: email })
     if (!user) {
       //no user with this email, throw error
-      throw new Error('user not found, check email')
+      throw creatError(401, 'user not found, check email')
     }
     //email validation success, get user details for password checking
     let [userData] = await User.find(user._id)
@@ -16,7 +17,7 @@ export const login = async (req, res, next) => {
     let isCorrect = await userData.matchPassword(password)
     if (!isCorrect) {
       //password is not correct throw new error
-      throw new Error('password dosent match, check password')
+      throw new createError(401, 'password dosent match, check password')
     }
     //all checking passed , do after login
     let token = generateToken(user._id)
@@ -25,7 +26,7 @@ export const login = async (req, res, next) => {
       .cookie('access_token', token, { httpOnly: true, maxAge: TTL_COOKIE })
       .send('login successful')
   } catch (e) {
-    return res.status(401).send(e.message)
+    next(e)
   }
 }
 export const signup = async (req, res, next) => {
@@ -34,12 +35,12 @@ export const signup = async (req, res, next) => {
     const { username, fullName, email, password } = req.body
     //check user exist
     let userExist = await User.exists({
-      $or: [{ username:username }, { email: email }],
+      $or: [{ username: username }, { email: email }],
     })
     console.log(userExist, 'lok')
     if (userExist) {
       //if a email alredy registered, throw new error
-      throw new Error('user already exist')
+      throw createError(400, 'user already exist')
     }
     // new user, create new doc
     let user = await User.create({
@@ -50,7 +51,7 @@ export const signup = async (req, res, next) => {
     })
     return res.status(201).json(`succcessfully created user ${user.fullName}`)
   } catch (e) {
-    res.status(400).send(e.message)
+    next(e)
   }
 }
 export const logout = (req, res) => {
