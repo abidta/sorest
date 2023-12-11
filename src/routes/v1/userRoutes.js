@@ -1,14 +1,16 @@
 import expres from 'express'
 import {
-  createPost,
   getUserProfile,
   updatePassword,
   updateUserDeatails,
-  likePost,
-  getPost,
-  createComment,
 } from '../../controllers/userControllers.js'
 import { getPosts } from '../../controllers/feedControllers.js'
+import {
+  createComment,
+  createPost,
+  getPost,
+  likePost,
+} from '../../controllers/postControllers.js'
 
 const router = expres.Router()
 
