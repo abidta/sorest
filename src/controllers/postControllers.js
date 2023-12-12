@@ -1,5 +1,6 @@
 import mongoose, { isValidObjectId } from 'mongoose'
 import Post from '../models/postModel.js'
+import User from '../models/userModel.js'
 import createError from 'http-errors'
 import { checkObjectId } from '../helpers/helper.js' //checking param objectId is valid or not
 
@@ -76,6 +77,28 @@ export const createComment = async (req, res, next) => {
     post.comments.push({ user: req.userId, text: comment })
     await post.save()
     res.status(200).json(post)
+  } catch (e) {
+    next(e)
+  }
+}
+export const deleteComment = async (req, res, next) => {
+  const { postId, commentId } = req.params
+  console.log(req.params)
+  try {
+    checkObjectId(postId)
+    checkObjectId(commentId)
+    let post = await Post.findById(postId)
+    if (!post) {
+      throw createError(404, 'post not found')
+    }
+    console.log(post.comments)
+    let index = post.comments.findIndex((comment) => comment._id == commentId)
+    if (index == -1) {
+      throw createError(404, 'comment not found')
+    }
+    post.comments.splice(index, 1)
+    await post.save()
+    res.json('comment deleted')
   } catch (e) {
     next(e)
   }
