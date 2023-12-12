@@ -1,10 +1,11 @@
+import createError from 'http-errors'
 import jwt from 'jsonwebtoken'
 
 export const verifyToken = (req, res, next) => {
   try {
-    if (req.cookies?.access_token) {
+    if (req.cookies?.access_token || req.headers?.access_token) {
       let verified = jwt.verify(
-        req.cookies.access_token,
+        req.cookies.access_token || req.headers.access_token,
         process.env.JWT_SECRET
       )
       if (verified) {
@@ -12,9 +13,9 @@ export const verifyToken = (req, res, next) => {
         next()
       }
     } else {
-      res.status(403).send('login first')
+      throw createError(403, 'login first')
     }
   } catch (e) {
-    res.status(401).send(e.message)
+    next(createError(401, e.message))
   }
 }
