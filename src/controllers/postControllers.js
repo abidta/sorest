@@ -21,7 +21,7 @@ export const createPost = async (req, res, next) => {
   }
 }
 export const getPost = async (req, res, next) => {
-  const { id: postId } = req.params
+  const { postId } = req.params
   try {
     checkObjectId(postId)
     let post = await Post.findById(postId).populate(
@@ -35,7 +35,7 @@ export const getPost = async (req, res, next) => {
   }
 }
 export const likePost = async (req, res, next) => {
-  const { id: postId } = req.params
+  const { postId } = req.params
   // 'req.query' may have multiple queries. currently only take first query.
   let { action } = req.query
   action = Array.isArray(action) ? action[0] : action
@@ -69,7 +69,7 @@ export const likePost = async (req, res, next) => {
 }
 export const createComment = async (req, res, next) => {
   const { comment } = req.body
-  const { id: postId } = req.params
+  const { postId } = req.params
   try {
     checkObjectId(postId)
     let post = await Post.findById(postId)
