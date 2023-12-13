@@ -85,18 +85,21 @@ export const deleteComment = async (req, res, next) => {
   const { postId, commentId } = req.params
   console.log(req.params)
   try {
-    checkObjectId(postId)
-    checkObjectId(commentId)
+    checkObjectId([postId, commentId])
+    console.log(typeof postId);
     let post = await Post.findById(postId)
-    if (!post) {
-      throw createError(404, 'post not found')
-    }
-    console.log(post.comments)
-    let index = post.comments.findIndex((comment) => comment._id == commentId)
-    if (index == -1) {
+    if (!post) throw createError(404, 'post not found')
+    if (!post.comments.id(commentId)) {
       throw createError(404, 'comment not found')
     }
-    post.comments.splice(index, 1)
+    console.log(post.comments.id(commentId))
+    if (
+      post.user != req.userId &&
+      post.comments.id(commentId).user != req.userId
+    ) {
+      throw createError(401, 'no permission to delete this comment')
+    }
+    post.comments.pull(commentId)
     await post.save()
     res.json('comment deleted')
   } catch (e) {

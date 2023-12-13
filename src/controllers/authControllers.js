@@ -9,7 +9,7 @@ export const login = async (req, res, next) => {
     let user = await User.exists({ email: email })
     if (!user) {
       //no user with this email, throw error
-      throw creatError(401, 'user not found, check email')
+      throw createError(401, 'user not found, check email')
     }
     //email validation success, get user details for password checking
     let [userData] = await User.find(user._id)
