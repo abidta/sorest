@@ -60,10 +60,9 @@ export const updatePassword = async (req, res, next) => {
 export const updateProfilePicture = async (req, res, next) => {
   try {
     let imageInfo = await uploadToCdn(req.file, req.userId)
-    console.log(imageInfo);
-    let update = await User.updateOne({ _id: req.userId }, { image: imageInfo })
-    console.log(update)
-    res.send('jk')
+    console.log(imageInfo)
+    await User.updateOne({ _id: req.userId }, { image: imageInfo })
+    res.json({ success: true, message: 'profile picture updated' })
   } catch (e) {
     next(e)
   }
