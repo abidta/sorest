@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import express from 'express'
 import logger from 'morgan'
 import v1routes from './routes/v1/v1.js'

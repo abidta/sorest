@@ -34,11 +34,12 @@ const userSchema = new Schema(
       ],
     },
     posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
+    image: Object,
   },
   { timestamps: true }
 )
 
-userSchema.pre('save', async function (next, options) {
+userSchema.pre('save', async function (next) {
   try {
     let salt = await bcrypt.genSalt(10)
     this.password = await bcrypt.hash(this.password, salt)

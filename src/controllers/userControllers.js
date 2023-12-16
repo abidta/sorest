@@ -1,7 +1,6 @@
-import mongoose, { isValidObjectId } from 'mongoose'
-import Post from '../models/postModel.js'
 import User from '../models/userModel.js'
 import createError from 'http-errors'
+import { uploadToCdn } from '../utils/uploadToCdn.js'
 
 export const user = (req, res) => {
   console.log(req.userId)
@@ -54,6 +53,17 @@ export const updatePassword = async (req, res, next) => {
     user.password = newPassword
     await user.save()
     res.status(200).json('update successfully')
+  } catch (e) {
+    next(e)
+  }
+}
+export const updateProfilePicture = async (req, res, next) => {
+  try {
+    let imageInfo = await uploadToCdn(req.file, req.userId)
+    console.log(imageInfo);
+    let update = await User.updateOne({ _id: req.userId }, { image: imageInfo })
+    console.log(update)
+    res.send('jk')
   } catch (e) {
     next(e)
   }
