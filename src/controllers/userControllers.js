@@ -11,7 +11,8 @@ export const getUserProfile = async (req, res, next) => {
     if (req.params?.username) {
       let userId = await User.exists({ username: req.params.username })
       if (userId) {
-        let userPosts = await User.find({ _id: userId }, '-password')
+        let userPosts = await User.findOne({ _id: userId }, '-password')
+          .lean()
           .populate({
             path: 'posts',
             select: '-user',

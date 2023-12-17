@@ -1,4 +1,4 @@
-import mongoose, { isValidObjectId } from 'mongoose'
+import mongoose from 'mongoose'
 import Post from '../models/postModel.js'
 import User from '../models/userModel.js'
 import createError from 'http-errors'
@@ -10,7 +10,7 @@ export const createPost = async (req, res, next) => {
       user: new mongoose.Types.ObjectId(req.userId),
       content: req.body.content,
     })
-    let isUpdatedUserPosts = await User.updateOne(
+    await User.updateOne(
       { _id: newPost.user },
       { $push: { posts: newPost._id } }
     )
@@ -24,7 +24,7 @@ export const getPost = async (req, res, next) => {
   const { postId } = req.params
   try {
     checkObjectId(postId)
-    let post = await Post.findById(postId).populate(
+    let post = await Post.findById(postId).lean().populate(
       'user',
       'username fullName email'
     )
@@ -86,7 +86,7 @@ export const deleteComment = async (req, res, next) => {
   console.log(req.params)
   try {
     checkObjectId([postId, commentId])
-    console.log(typeof postId);
+    console.log(typeof postId)
     let post = await Post.findById(postId)
     if (!post) throw createError(404, 'post not found')
     if (!post.comments.id(commentId)) {

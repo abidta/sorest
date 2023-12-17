@@ -1,7 +1,7 @@
 import Post from '../models/postModel.js'
 export const getPosts = async (req, res) => {
   try {
-    let posts = await Post.find().populate({
+    let posts = await Post.find({}).lean().populate({
       path: 'user',
       select: 'username',
     })
