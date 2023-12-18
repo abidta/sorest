@@ -3,12 +3,26 @@ import Post from '../models/postModel.js'
 import User from '../models/userModel.js'
 import createError from 'http-errors'
 import { checkObjectId } from '../helpers/helper.js' //checking param objectId is valid or not
+import { uploadToCdn } from '../utils/uploadToCdn.js'
 
+/**
+ *
+ * @param {*} req The express request object
+ * @param {*} res The express response object
+ * @param {*} next The next middleware function in the Express pipeline
+ */
 export const createPost = async (req, res, next) => {
+  const files = req.files
+  let uploadResult
   try {
+    if (files) {
+      uploadResult = await uploadToCdn(files, req.userId)
+      console.log(uploadResult, 'fd')
+    }
     let newPost = await Post.create({
       user: new mongoose.Types.ObjectId(req.userId),
       content: req.body.content,
+      media: uploadResult,
     })
     await User.updateOne(
       { _id: newPost.user },
@@ -24,10 +38,9 @@ export const getPost = async (req, res, next) => {
   const { postId } = req.params
   try {
     checkObjectId(postId)
-    let post = await Post.findById(postId).lean().populate(
-      'user',
-      'username fullName email'
-    )
+    let post = await Post.findById(postId)
+      .lean()
+      .populate('user', 'username fullName email')
     if (!post) throw createError(404, 'post not found')
     res.status(200).json(post)
   } catch (e) {

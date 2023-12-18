@@ -15,9 +15,10 @@ import {
 } from '../../controllers/postControllers.js'
 import { upload } from '../../middlewares/fileUpload.js'
 const router = expres.Router()
+const maxFileCount = 5
 
 router.route('/').get(getPosts)
-router.route('/post').post(createPost)
+router.route('/post').post(upload.array('posts', maxFileCount), createPost)
 router.route('/posts/:postId').get(getPost)
 router.route('/posts/:postId').put(likePost)
 router.route('/posts/:postId/comment').post(createComment)

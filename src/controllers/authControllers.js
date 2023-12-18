@@ -13,7 +13,7 @@ export const login = async (req, res, next) => {
        } 
      } 
      #swagger.responses[401] */
-  console.log(req.xml)
+  
   const { email, password } = req.body
   try {
     //check user exists

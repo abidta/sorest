@@ -27,6 +27,7 @@ const postSchema = new Schema(
       type: String,
       required: true,
     },
+    media: [Object],
     likes: [
       {
         type: mongoose.Schema.Types.ObjectId,
