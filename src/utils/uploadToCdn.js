@@ -23,7 +23,7 @@ export const uploadToCdn = async (file, userId) => {
   const createOptions = (i) => {
     const options = {
       file: fileBuffers ? fileBuffers[i] : file.buffer,
-      useUniqueFileName: fileBuffers && false,
+      useUniqueFileName: !!fileBuffers && true,
       fileName: fileBuffers
         ? `${Date.now()}_${userId}_${i}.jpg`
         : `${file.fieldname}_${userId}.jpg`,
