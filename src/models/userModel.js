@@ -33,6 +33,11 @@ const userSchema = new Schema(
         'password must include a lowercase, uppercase, number and special character',
       ],
     },
+    role: {
+      type: String,
+      enum: ['user', 'admin'],
+      default: 'user',
+    },
     posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
     image: Object,
   },
@@ -52,4 +57,5 @@ userSchema.method('matchPassword', async function (clientPassword) {
   return await bcrypt.compare(clientPassword, this.password)
 })
 const User = new mongoose.model('User', userSchema)
-export default User
+const Admin = new mongoose.model('Admin', userSchema.remove('posts'))
+export { User, Admin }

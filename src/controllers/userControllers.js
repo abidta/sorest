@@ -1,4 +1,4 @@
-import User from '../models/userModel.js'
+import {User} from '../models/userModel.js'
 import createError from 'http-errors'
 import { uploadToCdn } from '../utils/uploadToCdn.js'
 

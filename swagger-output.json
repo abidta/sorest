@@ -11,6 +11,16 @@
     }
   ],
   "paths": {
+    "/api/kl/kl": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/auth/login": {
       "post": {
         "tags": [
@@ -74,19 +84,173 @@
           "Auth routes"
         ],
         "description": "Logout user",
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/admin/": {
+      "get": {
+        "tags": [
+          "Admin routes"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/admin/login": {
+      "post": {
+        "tags": [
+          "Admin routes"
+        ],
+        "description": "",
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/admin/logout": {
+      "post": {
+        "tags": [
+          "Admin routes"
+        ],
+        "description": "",
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/super/": {
+      "get": {
+        "tags": [
+          "Super routes"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/super/login": {
+      "post": {
+        "tags": [
+          "Super routes"
+        ],
+        "description": "",
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "example": "any"
+                  },
+                  "password": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/super/logout": {
+      "post": {
+        "tags": [
+          "Super routes"
+        ],
+        "description": "",
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/super/create/admin": {
+      "post": {
+        "tags": [
+          "Super routes"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "example": "any"
+                  },
+                  "fullName": {
+                    "example": "any"
+                  },
+                  "email": {
+                    "example": "any"
+                  },
+                  "password": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/super/delete/{adminId}": {
+      "delete": {
+        "tags": [
+          "Super routes"
+        ],
+        "description": "",
         "parameters": [
           {
-            "name": "access_token",
-            "in": "header",
+            "name": "adminId",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "string"
             }
           }
         ],
         "responses": {
-          "202": {
-            "description": "Accepted"
-          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -99,15 +263,6 @@
           "User routes"
         ],
         "description": "",
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -127,15 +282,6 @@
           "User routes"
         ],
         "description": "",
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "201": {
             "description": "Created"
@@ -174,13 +320,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "access_token",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -202,13 +341,6 @@
             "name": "postId",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "access_token",
-            "in": "header",
             "schema": {
               "type": "string"
             }
@@ -242,13 +374,6 @@
             "name": "postId",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "access_token",
-            "in": "header",
             "schema": {
               "type": "string"
             }
@@ -300,13 +425,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "access_token",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -325,15 +443,6 @@
           "User routes"
         ],
         "description": "",
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -364,15 +473,6 @@
           "User routes"
         ],
         "description": "",
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -389,15 +489,6 @@
           "User routes"
         ],
         "description": "",
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -436,13 +527,6 @@
             "name": "username",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "access_token",
-            "in": "header",
             "schema": {
               "type": "string"
             }

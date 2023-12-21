@@ -8,6 +8,7 @@ import swaggerUi from 'swagger-ui-express'
 import swaggerDocument from '../swagger-output.json' assert { type: 'json' }
 import { errorHandler } from './middlewares/errorHandler.js'
 
+
 const app = express()
 
 app.use(cors({ origin: '*' }))
@@ -20,6 +21,9 @@ app.use(cookieParser())
 app.use(logger('dev'))
 
 //routes
+app.get('/api/kl/kl',(req,res)=>{
+    
+})
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 app.use('/', v1routes)
 
