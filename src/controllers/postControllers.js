@@ -1,9 +1,10 @@
 import mongoose from 'mongoose'
 import Post from '../models/postModel.js'
-import {User} from '../models/userModel.js'
+import { User } from '../models/userModel.js'
 import createError from 'http-errors'
 import { checkObjectId } from '../helpers/helper.js' //checking param objectId is valid or not
 import { uploadToCdn } from '../utils/uploadToCdn.js'
+import { SuccessResponse } from '../models/responseModel.js'
 
 /**
  *
@@ -29,7 +30,8 @@ export const createPost = async (req, res, next) => {
       { $push: { posts: newPost._id } }
     )
     console.log(newPost)
-    res.status(201).json(newPost)
+    let response = new SuccessResponse(undefined, newPost)
+    res.status(201).json(response)
   } catch (e) {
     next(createError(400, e))
   }
@@ -42,7 +44,8 @@ export const getPost = async (req, res, next) => {
       .lean()
       .populate('user', 'username fullName email')
     if (!post) throw createError(404, 'post not found')
-    res.status(200).json(post)
+    let response = new SuccessResponse(undefined, post)
+    res.status(200).json(response)
   } catch (e) {
     next(e)
   }
@@ -75,7 +78,8 @@ export const likePost = async (req, res, next) => {
       default:
         throw createError(400, 'query is not valid')
     }
-    res.status(200).send('done')
+    let response = new SuccessResponse()
+    res.status(200).send(response)
   } catch (e) {
     next(e)
   }
@@ -89,7 +93,8 @@ export const createComment = async (req, res, next) => {
     if (!post) throw createError(404, 'post not found')
     post.comments.push({ user: req.userId, text: comment })
     await post.save()
-    res.status(200).json(post)
+    let response = new SuccessResponse(undefined, post)
+    res.status(200).json(response)
   } catch (e) {
     next(e)
   }
@@ -114,7 +119,8 @@ export const deleteComment = async (req, res, next) => {
     }
     post.comments.pull(commentId)
     await post.save()
-    res.json('comment deleted')
+    let response = new SuccessResponse('comment deleted')
+    res.json(response)
   } catch (e) {
     next(e)
   }

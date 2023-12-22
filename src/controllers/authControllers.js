@@ -1,4 +1,5 @@
-import { role, tokenDef } from '../config/constants.js'
+import { cookieOptions, role, tokenDef } from '../config/constants.js'
+import { SuccessResponse } from '../models/responseModel.js'
 import { createPerson, loginPerson } from '../services/authServices.js'
 
 export const login = async (req, res, next) => {
@@ -14,10 +15,8 @@ export const login = async (req, res, next) => {
      #swagger.responses[401] */
   try {
     let token = await loginPerson(req.body, role.user)
-    let TTL_COOKIE = 3600 * 1000
-    return res
-      .cookie(tokenDef.user, token, { httpOnly: true, maxAge: TTL_COOKIE })
-      .send('login successful')
+    let response = new SuccessResponse('login successful')
+    return res.cookie(tokenDef.user, token, cookieOptions).send(response)
   } catch (e) {
     next(e)
   }
@@ -36,7 +35,10 @@ export const signup = async (req, res, next) => {
   try {
     console.log(req.body)
     let user = await createPerson(req.body, 'user')
-    return res.status(201).json(`succcessfully created user ${user.fullName}`)
+    let response = new SuccessResponse(
+      `succcessfully created user ${user.fullName}`
+    )
+    return res.status(201).json(response)
   } catch (e) {
     next(e)
   }
@@ -44,8 +46,6 @@ export const signup = async (req, res, next) => {
 export const logout = (req, res) => {
   /* #swagger.description = "Logout user"
      #swagger.responses[202] */
-  return res
-    .clearCookie(tokenDef.user)
-    .status(202)
-    .json({ message: 'Logout sucessfully' })
+  let response = new SuccessResponse('Logout sucessfully')
+  return res.clearCookie(tokenDef.user).status(202).json(response)
 }

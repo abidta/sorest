@@ -1,13 +1,15 @@
+import createError from 'http-errors'
 import Post from '../models/postModel.js'
-export const getPosts = async (req, res) => {
+import { SuccessResponse } from '../models/responseModel.js'
+export const getPosts = async (req, res, next) => {
   try {
     let posts = await Post.find({}).lean().populate({
       path: 'user',
       select: 'username',
     })
-    return res.json(posts)
+    let response = new SuccessResponse(undefined, posts)
+    return res.json(response)
   } catch (e) {
-    console.log('get post')
-    return res.status(401).send(e.message)
+    next(createError(401, e.message))
   }
 }

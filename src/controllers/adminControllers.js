@@ -1,4 +1,5 @@
-import { role, tokenDef } from '../config/constants.js'
+import { cookieOptions, role, tokenDef } from '../config/constants.js'
+import { SuccessResponse } from '../models/responseModel.js'
 import { loginPerson } from '../services/authServices.js'
 
 export const adminPanel = (req, res, next) => {
@@ -7,12 +8,13 @@ export const adminPanel = (req, res, next) => {
 export const adminLogin = async (req, res, next) => {
   try {
     let token = await loginPerson(req.body, role.admin)
-    let TTL_COOKIE = 3600 * 1000
-    return res
-      .cookie(tokenDef.admin, token, { httpOnly: true, maxAge: TTL_COOKIE })
-      .send('login successful')
+    let response = new SuccessResponse('login successful')
+    return res.cookie(tokenDef.admin, token, cookieOptions).send(response)
   } catch (e) {
     next(e)
   }
 }
-export const adminLogout = (req, res, next) => {}
+export const adminLogout = (req, res) => {
+  let response = new SuccessResponse('Logout sucessfully')
+  return res.clearCookie(tokenDef.admin).status(202).json(response)
+}

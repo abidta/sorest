@@ -62,4 +62,3 @@ export const loginPerson = async (payload, role) => {
   let token = generateToken(person._id, personData.role)
   return token
 }
-export const logoutPerson = (role) => {}

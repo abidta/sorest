@@ -1,6 +1,7 @@
-import {User} from '../models/userModel.js'
+import { User } from '../models/userModel.js'
 import createError from 'http-errors'
 import { uploadToCdn } from '../utils/uploadToCdn.js'
+import { SuccessResponse } from '../models/responseModel.js'
 
 export const user = (req, res) => {
   console.log(req.userId)
@@ -18,7 +19,8 @@ export const getUserProfile = async (req, res, next) => {
             select: '-user',
           })
           .exec()
-        return res.json(userPosts)
+        let response = new SuccessResponse(undefined, userPosts)
+        return res.json(response)
       }
       throw createError(404, 'no user found')
     }
@@ -34,7 +36,8 @@ export const updateUserDeatails = async (req, res, next) => {
       { fullName: name }
     )
     console.log(isUpdated)
-    res.json(isUpdated.acknowledged)
+    let response = new SuccessResponse()
+    res.json(response)
   } catch (e) {
     next(createError(400, e))
   }
@@ -53,7 +56,8 @@ export const updatePassword = async (req, res, next) => {
     }
     user.password = newPassword
     await user.save()
-    res.status(200).json('update successfully')
+    let response = new SuccessResponse('update successfully')
+    res.status(200).json(response)
   } catch (e) {
     next(e)
   }
@@ -63,7 +67,8 @@ export const updateProfilePicture = async (req, res, next) => {
     let imageInfo = await uploadToCdn(req.file, req.userId)
     console.log(imageInfo)
     await User.updateOne({ _id: req.userId }, { image: imageInfo })
-    res.json({ success: true, message: 'profile picture updated' })
+    let response = new SuccessResponse('profile picture updated')
+    res.json(response)
   } catch (e) {
     next(e)
   }

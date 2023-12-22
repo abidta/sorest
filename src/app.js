@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser'
 import swaggerUi from 'swagger-ui-express'
 import swaggerDocument from '../swagger-output.json' assert { type: 'json' }
 import { errorHandler } from './middlewares/errorHandler.js'
+import createHttpError from 'http-errors'
 
 
 const app = express()
@@ -27,7 +28,11 @@ app.get('/api/kl/kl',(req,res)=>{
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 app.use('/', v1routes)
 
+//catch 404
+app.use((req,res,next)=>{
+    next(createHttpError(404))
+})
 //error handler
 app.use(errorHandler)
 
-export { app }
+export default app 
