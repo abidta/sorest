@@ -1,6 +1,6 @@
 import createError from 'http-errors'
 import { User } from '../models/userModel.js'
-import { generateToken } from '../utils/generateToken.js'
+import { loginPerson } from '../services/authServices.js'
 
 export const login = async (req, res, next) => {
   /* #swagger.requestBody = {
@@ -13,25 +13,8 @@ export const login = async (req, res, next) => {
        } 
      } 
      #swagger.responses[401] */
-
-  const { email, password } = req.body
   try {
-    //check user exists
-    let user = await User.exists({ email: email })
-    if (!user) {
-      //no user with this email, throw error
-      throw createError(401, 'user not found, check email')
-    }
-    //email validation success, get user details for password checking
-    let [userData] = await User.find(user._id)
-    //check password is correct
-    let isCorrect = await userData.matchPassword(password)
-    if (!isCorrect) {
-      //password is not correct throw new error
-      throw new createError(401, 'password dosent match, check password')
-    }
-    //all checking passed , do after login
-    let token = generateToken(user._id, userData.role)
+    let token = await loginPerson(req.body, 'user')
     let TTL_COOKIE = 3600 * 1000
     return res
       .cookie('access_token', token, { httpOnly: true, maxAge: TTL_COOKIE })

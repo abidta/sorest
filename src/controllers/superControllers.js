@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt'
 import { generateToken } from '../utils/generateToken.js'
 
 export const superPanel = (req, res, next) => {
-  console.log('super api');
+  console.log('super api')
   res.send('super api')
 }
 export const superLogin = async (req, res, next) => {
@@ -18,7 +18,7 @@ export const superLogin = async (req, res, next) => {
     if (!superAdmin) throw createError(400, 'incorrect credentials')
     let isMatch = await bcrypt.compare(password, superAdmin.password)
     if (!isMatch) throw createError(400, 'incorrect credentials')
-    let token = generateToken(superAdmin._id,'super')
+    let token = generateToken(superAdmin._id, 'super')
     res
       .cookie('super_token', token, { maxAge: 800000, httpOnly: true })
       .send({ message: 'super login suuceesful' })
