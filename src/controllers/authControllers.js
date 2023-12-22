@@ -1,6 +1,5 @@
-import createError from 'http-errors'
-import { User } from '../models/userModel.js'
-import { loginPerson } from '../services/authServices.js'
+import { role, tokenDef } from '../config/constants.js'
+import { createPerson, loginPerson } from '../services/authServices.js'
 
 export const login = async (req, res, next) => {
   /* #swagger.requestBody = {
@@ -14,10 +13,10 @@ export const login = async (req, res, next) => {
      } 
      #swagger.responses[401] */
   try {
-    let token = await loginPerson(req.body, 'user')
+    let token = await loginPerson(req.body, role.user)
     let TTL_COOKIE = 3600 * 1000
     return res
-      .cookie('access_token', token, { httpOnly: true, maxAge: TTL_COOKIE })
+      .cookie(tokenDef.user, token, { httpOnly: true, maxAge: TTL_COOKIE })
       .send('login successful')
   } catch (e) {
     next(e)
@@ -36,23 +35,7 @@ export const signup = async (req, res, next) => {
      #swagger.responses[400] = { description: "user already exist or Bad request"} */
   try {
     console.log(req.body)
-    const { username, fullName, email, password } = req.body
-    //check user exist
-    let userExist = await User.exists({
-      $or: [{ username: username }, { email: email }],
-    })
-    console.log(userExist, 'lok')
-    if (userExist) {
-      //if a email alredy registered, throw new error
-      throw createError(400, 'user already exist')
-    }
-    // new user, create new doc
-    let user = await User.create({
-      username,
-      email,
-      password,
-      fullName,
-    })
+    let user = await createPerson(req.body, 'user')
     return res.status(201).json(`succcessfully created user ${user.fullName}`)
   } catch (e) {
     next(e)
@@ -62,7 +45,7 @@ export const logout = (req, res) => {
   /* #swagger.description = "Logout user"
      #swagger.responses[202] */
   return res
-    .clearCookie('access_token')
+    .clearCookie(tokenDef.user)
     .status(202)
     .json({ message: 'Logout sucessfully' })
 }

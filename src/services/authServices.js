@@ -5,22 +5,45 @@ import { generateToken } from '../utils/generateToken.js'
 /**
  * @typedef Token
  * @property {string}
+ * @typedef Person
+ * @property {object}
  */
-/**
- * 
- * @param {*} payload 
- * @param {*} role 
- * 
- */
-export const createPerson = async (payload, role) => {}
 /**
  *
- * @param {Object} data
+ * @param {object} payload
+ * @param {string} role
+ *@returns {Promise<Person>} person
+ */
+export const createPerson = async (payload, role) => {
+  let Person = role === 'admin' ? Admin : User
+  const { username, fullName, email, password } = payload
+  //check user exist
+  let personExist = await Person.exists({
+    $or: [{ username: username }, { email: email }],
+  })
+  console.log(personExist, 'lok')
+  if (personExist) {
+    //if a email alredy registered, throw new error
+    throw createError(400, 'user already exist')
+  }
+  // new user, create new doc
+  let person = await Person.create({
+    username,
+    email,
+    password,
+    fullName,
+    role,
+  })
+  return person
+}
+/**
+ *
+ * @param {object} payload
  * @param {string} role
  * @returns {Promise<Token>} token
  */
-export const loginPerson = async (data, role) => {
-  const { email, password } = data
+export const loginPerson = async (payload, role) => {
+  const { email, password } = payload
   let Person = role === 'admin' ? Admin : User
   //check person exists
   let person = await Person.exists({ email: email })
