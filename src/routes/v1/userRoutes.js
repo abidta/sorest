@@ -10,6 +10,7 @@ import {
   createComment,
   createPost,
   deleteComment,
+  deletePosts,
   getPost,
   likePost,
 } from '../../controllers/postControllers.js'
@@ -21,6 +22,7 @@ router.route('/').get(getPosts)
 router.route('/post').post(upload.array('posts', maxFileCount), createPost)
 router.route('/posts/:postId').get(getPost)
 router.route('/posts/:postId').put(likePost)
+router.route('/posts/:postId').delete(deletePosts)
 router.route('/posts/:postId/comment').post(createComment)
 router.route('/posts/:postId/comments/:commentId').delete(deleteComment)
 router.route('/account/update').put(updateUserDeatails)

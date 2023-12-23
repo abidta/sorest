@@ -1,4 +1,4 @@
-import { cookieOptions, role, tokenDef } from '../config/constants.js'
+import { cookieOptions, roleDef, tokenDef } from '../config/constants.js'
 import { SuccessResponse } from '../models/responseModel.js'
 import { createPerson, loginPerson } from '../services/authServices.js'
 
@@ -14,7 +14,7 @@ export const login = async (req, res, next) => {
      } 
      #swagger.responses[401] */
   try {
-    let token = await loginPerson(req.body, role.user)
+    let token = await loginPerson(req.body, roleDef.user)
     let response = new SuccessResponse('login successful')
     return res.cookie(tokenDef.user, token, cookieOptions).send(response)
   } catch (e) {

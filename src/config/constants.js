@@ -5,7 +5,7 @@ export const tokenDef = Object.freeze({
   admin: 'admin_token',
   super: 'super_token',
 })
-export const role = Object.freeze({
+export const roleDef = Object.freeze({
   admin: 'admin',
   user: 'user',
   super: 'super',

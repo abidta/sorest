@@ -5,6 +5,8 @@ import createError from 'http-errors'
 import { checkObjectId } from '../helpers/helper.js' //checking param objectId is valid or not
 import { uploadToCdn } from '../utils/uploadToCdn.js'
 import { SuccessResponse } from '../models/responseModel.js'
+import { deletePost } from '../services/postServices.js'
+import { roleDef } from '../config/constants.js'
 
 /**
  *
@@ -34,6 +36,16 @@ export const createPost = async (req, res, next) => {
     res.status(201).json(response)
   } catch (e) {
     next(createError(400, e))
+  }
+}
+export const deletePosts = async (req, res, next) => {
+  const { postId } = req.params
+  try {
+    checkObjectId(postId)
+    await deletePost(postId, roleDef.user, req.userId)
+    res.json(new SuccessResponse('Delete successFully'))
+  } catch (e) {
+    next(e)
   }
 }
 export const getPost = async (req, res, next) => {

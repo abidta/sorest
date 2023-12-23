@@ -1,6 +1,6 @@
 import createError from 'http-errors'
 import jwt from 'jsonwebtoken'
-import { role, tokenDef } from '../config/constants.js'
+import { roleDef, tokenDef } from '../config/constants.js'
 
 export const verifyToken = (req, res, next) => {
   let tokenType = tokenDef[req.originalUrl.split('/')[1]] ?? tokenDef.user
@@ -14,13 +14,13 @@ export const verifyToken = (req, res, next) => {
       if (tokenDef[verified.role] !== tokenType) {
         throw createError(401, 'role not match with this token')
       }
-      if (verified.role === role.user) {
+      if (verified.role === roleDef.user) {
         req.userId = verified.id
         next()
-      } else if (verified.role === role.admin) {
+      } else if (verified.role === roleDef.admin) {
         req.adminId = verified.id
         next()
-      } else if (verified.role === role.super) {
+      } else if (verified.role === roleDef.super) {
         next()
         req.superId = verified.id
       } else {

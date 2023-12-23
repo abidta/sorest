@@ -3,12 +3,17 @@ import createError from 'http-errors'
 import bcrypt from 'bcrypt'
 import { generateToken } from '../utils/generateToken.js'
 import { createPerson } from '../services/authServices.js'
-import { cookieOptions, role, tokenDef } from '../config/constants.js'
+import { cookieOptions, roleDef, tokenDef } from '../config/constants.js'
 import { SuccessResponse } from '../models/responseModel.js'
+import { Admin } from '../models/userModel.js'
 
-export const superPanel = (req, res, next) => {
-  console.log('super api')
-  res.send('super api')
+export const superPanel = async (req, res, next) => {
+  try {
+    let allAdmins = await Admin.find().select('-password').lean()
+    res.send(new SuccessResponse(undefined, allAdmins))
+  } catch (e) {
+    next(e)
+  }
 }
 export const superLogin = async (req, res, next) => {
   let { username, password } = req.body
@@ -19,7 +24,7 @@ export const superLogin = async (req, res, next) => {
     if (!superAdmin) throw createError(400, 'incorrect credentials')
     let isMatch = await bcrypt.compare(password, superAdmin.password)
     if (!isMatch) throw createError(400, 'incorrect credentials')
-    let token = generateToken(superAdmin._id, role.super)
+    let token = generateToken(superAdmin._id, roleDef.super)
     let response = new SuccessResponse('super login suuceesful')
     res.cookie(tokenDef.super, token, cookieOptions).send(response)
   } catch (e) {
@@ -32,6 +37,18 @@ export const createAdmin = async (req, res, next) => {
     let newAdmin = await createPerson(req.body, 'admin')
     let response = new SuccessResponse(undefined, newAdmin)
     res.json(response)
+  } catch (e) {
+    next(e)
+  }
+}
+export const deleteAdmin = async (req, res, next) => {
+  const { adminId } = req.params
+  try {
+    let isDeleted = await Admin.deleteOne({ _id: adminId })
+    if (!isDeleted) {
+      throw createError(404, 'Not found admin')
+    }
+    res.json(new SuccessResponse('Admin deletation successfully'))
   } catch (e) {
     next(e)
   }
