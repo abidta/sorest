@@ -3,6 +3,7 @@ import { SuccessResponse } from '../models/responseModel.js'
 import { User } from '../models/userModel.js'
 import { loginPerson } from '../services/authServices.js'
 import { deletePost } from '../services/postServices.js'
+import { checkObjectId } from '../utils/helper.js'
 
 export const adminPanel = async (req, res, next) => {
   try {
@@ -15,6 +16,7 @@ export const adminPanel = async (req, res, next) => {
 export const deletePosts = async (req, res, next) => {
   const { postId } = req.params
   try {
+    checkObjectId(postId)
     await deletePost(postId, roleDef.admin)
     res.json(new SuccessResponse('Delete successFully'))
   } catch (e) {

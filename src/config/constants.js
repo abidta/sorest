@@ -10,8 +10,7 @@ export const roleDef = Object.freeze({
   user: 'user',
   super: 'super',
 })
-export const cookieOptions={
-  maxAge:TTL_COOKIE,
-  httpOnly:true,
-
+export const cookieOptions = {
+  maxAge: TTL_COOKIE,
+  httpOnly: true,
 }

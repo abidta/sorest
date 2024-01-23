@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon src/main.js",
     "swagger": "node ./swagger.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest"
   },
   "repository": {
     "type": "git",
@@ -47,6 +47,7 @@
     "eslint-plugin-n": "^15.7.0",
     "eslint-plugin-promise": "^6.1.1",
     "nodemon": "^3.0.1",
-    "swagger-autogen": "^2.23.7"
+    "swagger-autogen": "^2.23.7",
+    "vitest": "^1.1.0"
   }
 }

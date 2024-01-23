@@ -6,6 +6,7 @@ import { createPerson } from '../services/authServices.js'
 import { cookieOptions, roleDef, tokenDef } from '../config/constants.js'
 import { SuccessResponse } from '../models/responseModel.js'
 import { Admin } from '../models/userModel.js'
+import { checkObjectId } from '../utils/helper.js'
 
 export const superPanel = async (req, res, next) => {
   try {
@@ -44,6 +45,7 @@ export const createAdmin = async (req, res, next) => {
 export const deleteAdmin = async (req, res, next) => {
   const { adminId } = req.params
   try {
+    checkObjectId(adminId)
     let isDeleted = await Admin.deleteOne({ _id: adminId })
     if (!isDeleted) {
       throw createError(404, 'Not found admin')

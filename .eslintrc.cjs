@@ -8,6 +8,11 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
+  globals: {
+    describe: true,
+    expect: true,
+    it: true,
+  },
   rules: {
     'no-unused-vars': [
       'error',

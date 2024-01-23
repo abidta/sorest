@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import Post from '../models/postModel.js'
 import { User } from '../models/userModel.js'
 import createError from 'http-errors'
-import { checkObjectId } from '../helpers/helper.js' //checking param objectId is valid or not
+import { checkObjectId } from '../utils/helper.js' //checking param objectId is valid or not
 import { uploadToCdn } from '../utils/uploadToCdn.js'
 import { SuccessResponse } from '../models/responseModel.js'
 import { deletePost } from '../services/postServices.js'
