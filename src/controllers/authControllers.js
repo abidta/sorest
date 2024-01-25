@@ -14,8 +14,8 @@ export const login = async (req, res, next) => {
      } 
      #swagger.responses[401] */
   try {
-    let token = await loginPerson(req.body, roleDef.user)
-    let response = new SuccessResponse('login successful')
+    let { token, user } = await loginPerson(req.body, roleDef.user)
+    let response = new SuccessResponse('login successful', user)
     return res.cookie(tokenDef.user, token, cookieOptions).send(response)
   } catch (e) {
     next(e)

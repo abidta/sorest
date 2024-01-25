@@ -52,13 +52,16 @@ export const loginPerson = async (payload, role) => {
     throw createError(401, 'Person not found, check email')
   }
   //email validation success, get Person details for password checking
-  let [personData] = await Person.find(Person._id)
+  let personData = await Person.findById(person._id).select('-posts')
+  console.log(personData)
   //check password is correct
   let isCorrect = await personData.matchPassword(password)
   if (!isCorrect) {
     //password is not correct throw new error
     throw new createError(401, 'password dosent match, check password')
   }
+  //for deleting password
+  personData.set('password')
   let token = generateToken(person._id, personData.role)
-  return token
+  return { token, user: personData }
 }

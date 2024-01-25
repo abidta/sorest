@@ -5,7 +5,7 @@ export const getPosts = async (req, res, next) => {
   try {
     let posts = await Post.find({}).lean().populate({
       path: 'user',
-      select: 'username',
+      select: 'username fullName image',
     })
     let response = new SuccessResponse(undefined, posts)
     return res.json(response)
