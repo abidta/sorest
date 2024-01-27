@@ -1,6 +1,7 @@
 import { cookieOptions, roleDef, tokenDef } from '../config/constants.js'
 import { SuccessResponse } from '../models/responseModel.js'
 import { createPerson, loginPerson } from '../services/authServices.js'
+import { sendMailTest } from '../services/sendOtp.js'
 
 export const login = async (req, res, next) => {
   /* #swagger.requestBody = {
@@ -48,4 +49,13 @@ export const logout = (req, res) => {
      #swagger.responses[202] */
   let response = new SuccessResponse('Logout sucessfully')
   return res.clearCookie(tokenDef.user).status(202).json(response)
+}
+export const sendMail=async()=>{
+  try {
+    await sendMailTest()
+    console.log('success');
+
+  } catch (error) {
+    console.log(error);
+  }
 }
