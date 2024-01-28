@@ -17,6 +17,7 @@ import { generateToken } from '../utils/generateToken.js'
 export const createPerson = async (payload, role) => {
   let Person = role === 'admin' ? Admin : User
   const { username, fullName, email, password } = payload
+  const isVerified = 'pending'
   //check user exist
   let personExist = await Person.exists({
     $or: [{ username: username }, { email: email }],
@@ -33,7 +34,9 @@ export const createPerson = async (payload, role) => {
     password,
     fullName,
     role,
+    isVerified,
   })
+  console.log(person)
   return person
 }
 /**
@@ -62,6 +65,6 @@ export const loginPerson = async (payload, role) => {
   }
   //for deleting password
   personData.set('password')
-  let token = generateToken(person._id, personData.role)
+  let token = generateToken(person._id, personData.role, personData?.isVerified)
   return { token, user: personData }
 }

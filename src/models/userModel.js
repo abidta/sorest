@@ -38,6 +38,11 @@ const userSchema = new Schema(
       enum: ['user', 'admin'],
       default: 'user',
     },
+    isVerified: {
+      type: String,
+      enum: ['pending', 'success'],
+      default: 'pending',
+    },
     posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
     image: Object,
   },
@@ -56,6 +61,6 @@ userSchema.pre('save', async function (next) {
 userSchema.method('matchPassword', async function (clientPassword) {
   return await bcrypt.compare(clientPassword, this.password)
 })
-const User = new mongoose.model('User', userSchema)
-const Admin = new mongoose.model('Admin', userSchema.remove('posts'))
+const User = mongoose.model('User', userSchema)
+const Admin = mongoose.model('Admin', userSchema.remove('posts'))
 export { User, Admin }

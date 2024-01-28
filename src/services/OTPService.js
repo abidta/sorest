@@ -1,7 +1,8 @@
 import nodemailer from 'nodemailer'
-import { generateOtp } from '../utils/generateOtp.js'
 import { authTemplate } from '../utils/templates.js'
+import { generateOtp } from '../utils/generateOtp.js'
 
+const otpStore = {}
 const transport = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -13,16 +14,24 @@ const transport = nodemailer.createTransport({
     refreshToken: process.env.MAIL_REFRESH_TOKEN,
   },
 })
-const mailOptions = async (otp, mail) => {
+const mailOptions = (otp, mail) => {
   return {
-    from: 'no-reply@mail.com',
+    from: '"Sorest"<no-reply@mail.com>',
     to: mail,
     subject: 'Otp verification email',
-    text: await authTemplate(otp),
+    html: authTemplate(otp),
   }
 }
 
-export const sendOtp = async (email) => {
+const send = async (email) => {
   const otp = await generateOtp()
-  return await transport.sendMail(await mailOptions(otp, email))
+  otpStore[email] = otp
+  return await transport.sendMail(mailOptions(otp, email))
 }
+const verify = (email, otp) => {
+  if (otpStore[email] == otp) {
+    return true
+  }
+  return false
+}
+export default { send, verify }

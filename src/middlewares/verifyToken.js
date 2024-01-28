@@ -15,6 +15,10 @@ export const verifyToken = (req, res, next) => {
         throw createError(401, 'role not match with this token')
       }
       if (verified.role === roleDef.user) {
+        if (verified?.isVerified === 'pending') {
+          console.log('pendinggggggg')
+          throw createError(403, 'Email is not verified')
+        }
         req.userId = verified.id
         next()
       } else if (verified.role === roleDef.admin) {
@@ -30,6 +34,6 @@ export const verifyToken = (req, res, next) => {
       throw createError(403, 'login first')
     }
   } catch (e) {
-    next(createError(401, e.message))
+    next(createError(e?.status, e.message))
   }
 }
