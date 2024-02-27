@@ -2,6 +2,9 @@ import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 
 const { Schema } = mongoose
+const postSchema = new Schema({
+  posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
+})
 const userSchema = new Schema(
   {
     username: {
@@ -43,7 +46,6 @@ const userSchema = new Schema(
       enum: ['pending', 'success'],
       default: 'pending',
     },
-    posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
     image: Object,
   },
   { timestamps: true }
@@ -61,6 +63,6 @@ userSchema.pre('save', async function (next) {
 userSchema.method('matchPassword', async function (clientPassword) {
   return await bcrypt.compare(clientPassword, this.password)
 })
-const User = mongoose.model('User', userSchema)
-const Admin = mongoose.model('Admin', userSchema.remove('posts'))
+const User = mongoose.model('User', userSchema.add(postSchema))
+const Admin = mongoose.model('Admin', userSchema)
 export { User, Admin }

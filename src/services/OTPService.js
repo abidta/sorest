@@ -5,6 +5,10 @@ import { generateOtp } from '../utils/generateOtp.js'
 const otpStore = {}
 const transport = nodemailer.createTransport({
   service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure:false,
+  priority:'high',
   auth: {
     type: 'OAuth2',
     user: process.env.MAIL_USERNAME,

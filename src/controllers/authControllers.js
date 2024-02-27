@@ -39,7 +39,8 @@ export const signup = async (req, res, next) => {
     console.log(req.body)
     let user = await createPerson(req.body, 'user')
     let response = new SuccessResponse(
-      `succcessfully created user ${user.fullName}`
+      `succcessfully created user ${user.fullName}`,
+      { email: user.email }
     )
     const email = req.body.email
     const mailInfo = await OTP.send(email)

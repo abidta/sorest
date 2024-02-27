@@ -49,7 +49,11 @@ export const loginPerson = async (payload, role) => {
   const { email, password } = payload
   let Person = role === 'admin' ? Admin : User
   //check person exists
-  let person = await Person.exists({ email: email })
+  console.log(email);
+  let person = await Person.exists({
+    $or: [{ email: email }, { username: email }],
+  })
+  console.log(person);
   if (!person) {
     //no Person with this email, throw error
     throw createError(401, 'Person not found, check email')
