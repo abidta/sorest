@@ -11,17 +11,17 @@
     }
   ],
   "paths": {
-    "/api/kl/kl": {
+    "/api/test": {
       "get": {
         "description": "",
         "responses": {
-          "default": {
-            "description": ""
+          "200": {
+            "description": "OK"
           }
         }
       }
     },
-    "/auth/login": {
+    "/api/v1/auth/login": {
       "post": {
         "tags": [
           "Auth routes"
@@ -48,7 +48,7 @@
         }
       }
     },
-    "/auth/signup": {
+    "/api/v1/auth/signup": {
       "post": {
         "tags": [
           "Auth routes"
@@ -78,7 +78,70 @@
         }
       }
     },
-    "/auth/logout": {
+    "/api/v1/auth/send-mail": {
+      "post": {
+        "tags": [
+          "Auth routes"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/verify-otp": {
+      "post": {
+        "tags": [
+          "Auth routes"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "example": "any"
+                  },
+                  "otp": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/logout": {
       "post": {
         "tags": [
           "Auth routes"
@@ -94,7 +157,7 @@
         }
       }
     },
-    "/admin/": {
+    "/api/v1/admin/": {
       "get": {
         "tags": [
           "Admin routes"
@@ -110,7 +173,7 @@
         }
       }
     },
-    "/admin/posts/delete/{postId}": {
+    "/api/v1/admin/posts/delete/{postId}": {
       "delete": {
         "tags": [
           "Admin routes"
@@ -136,7 +199,7 @@
         }
       }
     },
-    "/admin/login": {
+    "/api/v1/admin/login": {
       "post": {
         "tags": [
           "Admin routes"
@@ -149,7 +212,7 @@
         }
       }
     },
-    "/admin/logout": {
+    "/api/v1/admin/logout": {
       "post": {
         "tags": [
           "Admin routes"
@@ -162,7 +225,7 @@
         }
       }
     },
-    "/super/": {
+    "/api/v1/super/": {
       "get": {
         "tags": [
           "Super routes"
@@ -178,7 +241,7 @@
         }
       }
     },
-    "/super/login": {
+    "/api/v1/super/login": {
       "post": {
         "tags": [
           "Super routes"
@@ -208,7 +271,7 @@
         }
       }
     },
-    "/super/logout": {
+    "/api/v1/super/logout": {
       "post": {
         "tags": [
           "Super routes"
@@ -221,7 +284,7 @@
         }
       }
     },
-    "/super/create/admin": {
+    "/api/v1/super/create/admin": {
       "post": {
         "tags": [
           "Super routes"
@@ -237,7 +300,7 @@
         }
       }
     },
-    "/super/delete/{adminId}": {
+    "/api/v1/super/delete/{adminId}": {
       "delete": {
         "tags": [
           "Super routes"
@@ -263,7 +326,7 @@
         }
       }
     },
-    "/": {
+    "/api/v1/": {
       "get": {
         "tags": [
           "User routes"
@@ -279,7 +342,7 @@
         }
       }
     },
-    "/post": {
+    "/api/v1/post": {
       "post": {
         "tags": [
           "User routes"
@@ -309,7 +372,7 @@
         }
       }
     },
-    "/posts/{postId}": {
+    "/api/v1/posts/{postId}": {
       "get": {
         "tags": [
           "User routes"
@@ -390,7 +453,7 @@
         }
       }
     },
-    "/posts/{postId}/comment": {
+    "/api/v1/posts/{postId}/comment": {
       "post": {
         "tags": [
           "User routes"
@@ -430,7 +493,7 @@
         }
       }
     },
-    "/posts/{postId}/comments/{commentId}": {
+    "/api/v1/posts/{postId}/comments/{commentId}": {
       "delete": {
         "tags": [
           "User routes"
@@ -464,7 +527,7 @@
         }
       }
     },
-    "/account/update": {
+    "/api/v1/account/update": {
       "put": {
         "tags": [
           "User routes"
@@ -494,7 +557,7 @@
         }
       }
     },
-    "/account/image": {
+    "/api/v1/account/image": {
       "put": {
         "tags": [
           "User routes"
@@ -510,7 +573,7 @@
         }
       }
     },
-    "/account/update/password": {
+    "/api/v1/account/update/password": {
       "put": {
         "tags": [
           "User routes"
@@ -543,7 +606,7 @@
         }
       }
     },
-    "/{username}": {
+    "/api/v1/{username}": {
       "get": {
         "tags": [
           "User routes"
