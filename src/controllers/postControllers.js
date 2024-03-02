@@ -54,8 +54,13 @@ export const getPost = async (req, res, next) => {
     checkObjectId(postId)
     let post = await Post.findById(postId)
       .lean()
-      .populate('user', 'username fullName email')
+      .populate('user', 'username fullName email ')
+
     if (!post) throw createError(404, 'post not found')
+
+    if (post.likes.some((id) => id.equals(req.userId))) {
+      post.liked = true
+    }
     let response = new SuccessResponse(undefined, post)
     res.status(200).json(response)
   } catch (e) {
@@ -90,7 +95,7 @@ export const likePost = async (req, res, next) => {
       default:
         throw createError(400, 'query is not valid')
     }
-    let response = new SuccessResponse()
+    let response = new SuccessResponse(`${action} successful`)
     res.status(200).send(response)
   } catch (e) {
     next(e)
@@ -116,23 +121,25 @@ export const deleteComment = async (req, res, next) => {
   console.log(req.params)
   try {
     checkObjectId([postId, commentId])
-    console.log(typeof postId)
+
     let post = await Post.findById(postId)
     if (!post) throw createError(404, 'post not found')
     if (!post.comments.id(commentId)) {
       throw createError(404, 'comment not found')
     }
     console.log(post.comments.id(commentId))
+
     if (
       post.user != req.userId &&
       post.comments.id(commentId).user != req.userId
     ) {
       throw createError(401, 'no permission to delete this comment')
     }
+
     post.comments.pull(commentId)
     await post.save()
-    let response = new SuccessResponse('comment deleted')
-    res.json(response)
+
+    res.json(new SuccessResponse('comment deleted'))
   } catch (e) {
     next(e)
   }
