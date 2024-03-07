@@ -5,6 +5,7 @@ import { SuccessResponse } from '../models/responseModel.js'
 export const getPosts = async (req, res, next) => {
   try {
     let posts = await Post.find({})
+      .sort({ createdAt: 'desc' })
       .populate({
         path: 'user',
         select: 'username fullName image',

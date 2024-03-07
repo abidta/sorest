@@ -10,13 +10,16 @@ import swaggerUi from 'swagger-ui-express'
 import { errorHandler } from './middlewares/errorHandler.js'
 import createHttpError from 'http-errors'
 import { SuccessResponse } from './models/responseModel.js'
+import { limiter } from './config/config.js'
 
 const require = createRequire(import.meta.url)
 const swaggerDocument = require('../swagger-output.json')
 
 const app = express()
-const allowedOrigins = /^.*$/
 
+const allowedOrigins = /^.*$/ //allow all origins
+
+//cors middleware
 app.use(
   cors({
     origin: function (origin, cb) {
@@ -29,6 +32,9 @@ app.use(
     credentials: true,
   })
 )
+
+//ratelimiter
+app.use(limiter)
 
 //regular middlewares
 app.use(express.json())
