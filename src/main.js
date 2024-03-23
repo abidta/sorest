@@ -3,6 +3,7 @@ import app from './app.js'
 import { connectDb } from './config/db.js'
 const server = http.createServer(app)
 const PORT = process.env.PORT || 3000
+
 async function main() {
   try {
     await startServerAndDb()

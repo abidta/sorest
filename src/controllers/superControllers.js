@@ -22,9 +22,12 @@ export const superLogin = async (req, res, next) => {
   try {
     const superCollection = mongoose.connection.db.collection('super')
     let superAdmin = await superCollection.findOne({ username: username })
+
     if (!superAdmin) throw createError(400, 'incorrect credentials')
+
     let isMatch = await bcrypt.compare(password, superAdmin.password)
     if (!isMatch) throw createError(400, 'incorrect credentials')
+
     let token = generateToken(superAdmin._id, roleDef.super)
     let response = new SuccessResponse('super login suuceesful')
     res.cookie(tokenDef.super, token, cookieOptions).send(response)

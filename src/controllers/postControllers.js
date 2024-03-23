@@ -17,6 +17,7 @@ import { roleDef } from '../config/constants.js'
 export const createPost = async (req, res, next) => {
   const files = req.files
   let uploadResult
+  console.log(files, 'files')
   try {
     if (files) {
       uploadResult = await uploadToCdn(files, req.userId)
@@ -38,6 +39,8 @@ export const createPost = async (req, res, next) => {
     next(createError(400, e))
   }
 }
+
+//delete post with postId
 export const deletePosts = async (req, res, next) => {
   const { postId } = req.params
   try {
@@ -48,6 +51,8 @@ export const deletePosts = async (req, res, next) => {
     next(e)
   }
 }
+
+//get post with postId
 export const getPost = async (req, res, next) => {
   const { postId } = req.params
   try {
@@ -67,6 +72,7 @@ export const getPost = async (req, res, next) => {
     next(e)
   }
 }
+
 export const likePost = async (req, res, next) => {
   const { postId } = req.params
   // 'req.query' may have multiple queries. currently only take first query.
@@ -101,6 +107,7 @@ export const likePost = async (req, res, next) => {
     next(e)
   }
 }
+
 export const createComment = async (req, res, next) => {
   const { comment } = req.body
   const { postId } = req.params
@@ -116,6 +123,7 @@ export const createComment = async (req, res, next) => {
     next(e)
   }
 }
+
 export const deleteComment = async (req, res, next) => {
   const { postId, commentId } = req.params
   console.log(req.params)
