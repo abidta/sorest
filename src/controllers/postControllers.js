@@ -23,18 +23,25 @@ export const createPost = async (req, res, next) => {
       uploadResult = await uploadToCdn(files, req.userId)
       console.log(uploadResult, 'fd')
     }
+
     let newPost = await Post.create({
       user: new mongoose.Types.ObjectId(req.userId),
       content: req.body.content,
-      media: uploadResult,
+      media: uploadResult ?? [],
     })
+
     await User.updateOne(
       { _id: newPost.user },
       { $push: { posts: newPost._id } }
     )
-    console.log(newPost)
-    let response = new SuccessResponse(undefined, newPost)
-    res.status(201).json(response)
+
+    const post = await Post.populate(newPost, {
+      path: 'user',
+      select: 'username fullName',
+    })
+    console.log(post)
+
+    res.status(201).json(new SuccessResponse(undefined, post))
   } catch (e) {
     next(createError(400, e))
   }

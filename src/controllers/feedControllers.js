@@ -4,15 +4,15 @@ import { SuccessResponse } from '../models/responseModel.js'
 
 //get all posts for feed,
 export const getPosts = async (req, res, next) => {
-  const { page, count } = req.query
-  const limit = count ?? 0
+  const { page, limit } = req.query
+  const count = limit ?? 0
   const skip = page > 0 ? (page - 1) * (limit !== 0 ? limit : 10) : 0
 
   try {
     let posts = await Post.find({})
       .sort({ createdAt: 'desc' })
       .skip(skip)
-      .limit(limit)
+      .limit(count)
       .populate({
         path: 'user',
         select: 'username fullName image',

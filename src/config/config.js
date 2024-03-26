@@ -6,3 +6,10 @@ export const limiter = rateLimit({
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 })
+
+export const verifyOTPLimiter = rateLimit({
+  windowMs:5* 60 * 1000, // 5 minutes
+  max: 5,
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+})
