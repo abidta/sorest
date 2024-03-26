@@ -23,6 +23,7 @@ export const deletePosts = async (req, res, next) => {
     next(e)
   }
 }
+
 export const adminLogin = async (req, res, next) => {
   try {
     let token = await loginPerson(req.body, roleDef.admin)

@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import { roleDef, tokenDef } from '../config/constants.js'
 
 export const verifyToken = (req, res, next) => {
-  let tokenType = tokenDef[req.originalUrl.split('/')[1]] ?? tokenDef.user
+  let tokenType = tokenDef[req.originalUrl.split('/')[3]] ?? tokenDef.user
   console.log(tokenType, req.originalUrl.split('/'), 'type')
   try {
     if (req.cookies?.[tokenType] || req.headers?.[tokenType]) {
