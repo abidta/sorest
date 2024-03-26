@@ -24,6 +24,20 @@ export const deletePosts = async (req, res, next) => {
   }
 }
 
+export const blockUser = async (req, res, next) => {
+  const { userId } = req.body
+  try {
+    await User.updateOne(
+      { _id: userId },
+      {
+        isBlocked: true,
+      }
+    )
+  } catch (e) {
+    next(e)
+  }
+}
+
 export const adminLogin = async (req, res, next) => {
   try {
     let token = await loginPerson(req.body, roleDef.admin)
