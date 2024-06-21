@@ -58,3 +58,8 @@ export const uploadToCdn = async (file, userId) => {
     console.log(error)
   }
 }
+
+export const deleteFile = async (media) => {
+  const deletePromises = media.map((file) => imageKit.deleteFile(file.fileId))
+  await Promise.all(deletePromises)
+}

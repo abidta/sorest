@@ -3,6 +3,7 @@ import { roleDef } from '../config/constants.js'
 import Post from '../models/postModel.js'
 import mongoose from 'mongoose'
 import { User } from '../models/userModel.js'
+import { deleteFile } from '../utils/uploadToCdn.js'
 
 export const deletePost = async (postId, role, userId) => {
   let post = await Post.findById(postId)
@@ -11,6 +12,9 @@ export const deletePost = async (postId, role, userId) => {
   }
   if (role === roleDef.user && post.user != userId) {
     throw createError(403, 'No permission to delete this post')
+  }
+  if (post.media.length!==0) {
+    await deleteFile(post.media)
   }
   await post.deleteOne({ _id: postId })
   return true
