@@ -1,12 +1,11 @@
-import mongoose from 'mongoose'
 import Post from '../models/postModel.js'
-import { User } from '../models/userModel.js'
 import createError from 'http-errors'
 import { checkObjectId } from '../utils/helper.js' //checking param objectId is valid or not
 import { uploadToCdn } from '../utils/uploadToCdn.js'
 import { SuccessResponse } from '../models/responseModel.js'
-import { deletePost } from '../services/postServices.js'
+import { deletePost, postService } from '../services/postServices.js'
 import { roleDef } from '../config/constants.js'
+import { uploadQueue } from '../config/queue.js'
 
 /**
  *
@@ -17,31 +16,23 @@ import { roleDef } from '../config/constants.js'
 export const createPost = async (req, res, next) => {
   const files = req.files
   let uploadResult
-  console.log(files, 'files')
   try {
-    if (files) {
-      uploadResult = await uploadToCdn(files, req.userId)
-      console.log(uploadResult, 'fd')
+    if (!files) {
+      const post = postService(req.userId, req.body.content)
+      return res.status(201).json(new SuccessResponse(undefined, post))
     }
+    /**
+     * if files, file uploading in background process with bull and redis.
+     */
 
-    let newPost = await Post.create({
-      user: new mongoose.Types.ObjectId(req.userId),
-      content: req.body.content,
-      media: uploadResult ?? [],
+    uploadQueue.add({ file: files })
+    res.json('upload process started')
+    uploadQueue.process(async (job) => {
+      console.log('queue')
+      const { file } = job.data
+      uploadResult = await uploadToCdn(file, req.userId)
+      return postService(req.userId, req.body.content, uploadResult)
     })
-
-    await User.updateOne(
-      { _id: newPost.user },
-      { $push: { posts: newPost._id } }
-    )
-
-    const post = await Post.populate(newPost, {
-      path: 'user',
-      select: 'username fullName',
-    })
-    console.log(post)
-
-    res.status(201).json(new SuccessResponse(undefined, post))
   } catch (e) {
     next(createError(400, e))
   }
