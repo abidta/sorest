@@ -1,6 +1,6 @@
 import createError from 'http-errors'
 import { cookieOptions, roleDef, tokenDef } from '../config/constants.js'
-import { SuccessResponse } from '../models/responseModel.js'
+import { ErrorResponse, SuccessResponse } from '../models/responseModel.js'
 import { createPerson, loginPerson } from '../services/authServices.js'
 import OTP from '../services/OTPService.js'
 import { User } from '../models/userModel.js'
@@ -18,6 +18,17 @@ export const login = async (req, res, next) => {
      #swagger.responses[401] */
   try {
     let { token, user } = await loginPerson(req.body, roleDef.user)
+    if (user.isVerified === 'pending') {
+      return res
+        .status(403)
+        .json(
+          new ErrorResponse('verification pending', {
+            status: 403,
+            email: user.email,
+          })
+        )
+    }
+
     let response = new SuccessResponse('login successful', user)
     return res.cookie(tokenDef.user, token, cookieOptions).send(response)
   } catch (e) {

@@ -17,10 +17,12 @@ export class ErrorResponse {
   /**
    *
    * @param {string} message
+   * @param {object} errData
    */
-  constructor(message) {
+  constructor(message, data = null) {
     this.message = message ?? 'Something went wrong'
     this.success = false
     this.error = true
+    this.data = data
   }
 }
